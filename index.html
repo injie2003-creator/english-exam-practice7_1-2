@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文段考練習 - Unit 4</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .option {
+            padding: 10px 15px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background-color: #d6dbdf;
+        }
+        .option.selected {
+            background-color: #3498db;
+            color: white;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .tab-container {
+            margin: 20px 0;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 5px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+            margin: 5px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .hidden {
+            display: none;
+        }
+        .review-section {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        .flashcard {
+            width: 300px;
+            height: 200px;
+            margin: 20px auto;
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .flashcard-front {
+            background-color: #3498db;
+            color: white;
+        }
+        .flashcard-back {
+            background-color: #f8f9fa;
+            color: #333;
+            transform: rotateY(180deg);
+        }
+        .flashcard-word {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .points-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-weight: bold;
+            z-index: 100;
+        }
+        .audio-btn {
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .exercise-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .exercise-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .exercise-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .reward-message {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background-color: rgba(46, 204, 113, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 1000;
+            display: none;
+            animation: fadeInOut 1.5s ease-in-out;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            60% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .hint {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .chinese-prompt {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .round-complete {
+            text-align: center;
+            padding: 20px;
+            background-color: #d4edda;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .new-round-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .more-practice-btn {
+            background-color: #f39c12;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .correct-answer {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .cloze-blank {
+            display: inline-block;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="points-display" id="points-display">積分: 0</div>
+    <div class="reward-message" id="reward-message">+10 積分!</div>
+    
+    <div class="container">
+        <h1>英文段考練習 - Unit 4</h1>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="learned-count">0</div>
+                <div>已學會</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="practice-count">0</div>
+                <div>需練習</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="progress-percent">0%</div>
+                <div>完成進度</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="points-count">0</div>
+                <div>總積分</div>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="vocab">單字練習</div>
+                <div class="tab" data-tab="pronunciation">發音練習</div>
+                <div class="tab" data-tab="grammar">文法練習</div>
+                <div class="tab" data-tab="cloze">克漏字填空</div>
+                <div class="tab" data-tab="review">需複習項目</div>
+            </div>
+            
+            <!-- 單字練習 -->
+            <div class="tab-content active" id="vocab">
+                <div class="section">
+                    <h2>單字卡片練習</h2>
+                    <p>點擊卡片查看英文單字詳情，選擇"已學會"或"需練習"</p>
+                    
+                    <div id="vocab-round-info">
+                        <p>目前回合進度: <span id="round-progress">0/0</span></p>
+                        <p>剩餘單字: <span id="remaining-words">0</span></p>
+                    </div>
+                    
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-word" id="card-meaning-front">中文意思</div>
+                                <p>點擊翻轉查看英文單字</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-word" id="card-word-back">英文單字</div>
+                                <div id="card-pronunciation">發音</div>
+                                <div id="card-part">詞性</div>
+                                <button class="audio-btn" id="audio-btn">🔊</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard-controls">
+                        <button class="btn btn-success" id="btn-learned">已學會</button>
+                        <button class="btn btn-danger" id="btn-practice">需練習</button>
+                    </div>
+                    
+                    <div id="round-complete-message" class="round-complete hidden">
+                        <h3>恭喜！您已完成本回合練習！</h3>
+                        <p>所有單字都已標記為"已學會"</p>
+                        <button class="new-round-btn" id="new-round-btn">開始新回合</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 發音練習 -->
+            <div class="tab-content" id="pronunciation">
+                <div class="section">
+                    <h2>發音對比練習</h2>
+                    <p>請選擇你聽到的發音：</p>
+                    <div class="exercise-container" id="pronunciation-questions">
+                        <!-- 發音題目將通過JavaScript動態生成 -->
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-primary" id="check-pronunciation">檢查答案</button>
+                        <button class="more-practice-btn" id="new-pronunciation">更多練習</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 文法練習 -->
+            <div class="tab-content" id="grammar">
+                <div class="section">
+                    <h2>現在分詞填空</h2>
+                    <div id="gerund-questions">
+                        <!-- 現在分詞題目將通過JavaScript動態生成 -->
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-primary" id="check-gerund">檢查答案</button>
+                        <button class="more-practice-btn" id="new-gerund">更多練習</button>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>人稱代名詞填空</h2>
+                    <div id="pronoun-questions">
+                        <!-- 人稱代名詞題目將通過JavaScript動態生成 -->
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-primary" id="check-pronoun">檢查答案</button>
+                        <button class="more-practice-btn" id="new-pronoun">更多練習</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 克漏字填空 -->
+            <div class="tab-content" id="cloze">
+                <div class="section">
+                    <h2>克漏字綜合練習</h2>
+                    <p>請填入適當的單字或詞組：</p>
+                    <div id="cloze-passage">
+                        <!-- 克漏字段落將通過JavaScript動態生成 -->
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-primary" id="check-cloze">檢查答案</button>
+                        <button class="btn btn-info" id="show-answers">公布答案</button>
+                        <button class="more-practice-btn" id="new-cloze">更多練習</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 需複習項目 -->
+            <div class="tab-content" id="review">
+                <div class="section review-section">
+                    <h2>需複習項目</h2>
+                    <p>以下是你標記為需要練習的項目：</p>
+                    <div id="review-items">
+                        <!-- 需複習項目將通過JavaScript動態生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 詞彙數據 - 包含所有單字
+        const vocabulary = [
+            { word: "party", pronunciation: "[ˈpɑːrti]", partOfSpeech: "n.", meaning: "派對；宴會" },
+            { word: "report", pronunciation: "[rɪˈpɔːrt]", partOfSpeech: "v.n.", meaning: "報導" },
+            { word: "popular", pronunciation: "[ˈpɒpjʊlər]", partOfSpeech: "adj.", meaning: "受歡迎的" },
+            { word: "fan", pronunciation: "[fæn]", partOfSpeech: "n.", meaning: "… 迷" },
+            { word: "shake hands", pronunciation: "[ʃeɪk hændz]", partOfSpeech: "phr.", meaning: "握手" },
+            { word: "everyone", pronunciation: "[ˈevriwʌn]", partOfSpeech: "pron.", meaning: "每個人 (= everybody)" },
+            { word: "sign", pronunciation: "[saɪn]", partOfSpeech: "v.", meaning: "簽名" },
+            { word: "music video", pronunciation: "[ˈmjuːzɪk ˈvɪdioʊ]", partOfSpeech: "n.", meaning: "音樂影片" },
+            { word: "band", pronunciation: "[bænd]", partOfSpeech: "n.", meaning: "樂團" },
+            { word: "take a look", pronunciation: "[teɪk ə lʊk]", partOfSpeech: "phr.", meaning: "看一看" },
+            { word: "all", pronunciation: "[ɔːl]", partOfSpeech: "adj.", meaning: "所有的" },
+            { word: "cute", pronunciation: "[kjuːt]", partOfSpeech: "adj.", meaning: "可愛的" },
+            { word: "great", pronunciation: "[ɡreɪt]", partOfSpeech: "adj.", meaning: "棒的" },
+            { word: "free", pronunciation: "[friː]", partOfSpeech: "adj.", meaning: "有空的" },
+            { word: "weekend", pronunciation: "[ˈwiːkend]", partOfSpeech: "n.", meaning: "週末" },
+            { word: "Saturday", pronunciation: "[ˈsætərdeɪ]", partOfSpeech: "n.", meaning: "星期六" },
+            { word: "together", pronunciation: "[təˈɡeðər]", partOfSpeech: "adv.", meaning: "一起" },
+            { word: "ready", pronunciation: "[ˈredi]", partOfSpeech: "adj.", meaning: "準備好的" },
+            { word: "p.m.", pronunciation: "[piː em]", partOfSpeech: "adv.", meaning: "下午：晚上" },
+            { word: "o'clock", pronunciation: "[əˈklɒk]", partOfSpeech: "adv.", meaning: "… 點鐘" },
+            { word: "day", pronunciation: "[deɪ]", partOfSpeech: "n.", meaning: "日；天" },
+            { word: "today", pronunciation: "[təˈdeɪ]", partOfSpeech: "adv. n.", meaning: "今天" },
+            { word: "or", pronunciation: "[ɔːr]", partOfSpeech: "conj.", meaning: "或者" },
+            { word: "time", pronunciation: "[taɪm]", partOfSpeech: "n.", meaning: "次；時間" },
+            { word: "wake up", pronunciation: "[weɪk ʌp]", partOfSpeech: "phr.", meaning: "醒來；叫醒..." },
+            { word: "class", pronunciation: "[klæs]", partOfSpeech: "n.", meaning: "課；班級" },
+            { word: "Oh my!", pronunciation: "[oʊ maɪ]", partOfSpeech: "phr.", meaning: "天哪！" },
+            { word: "see", pronunciation: "[siː]", partOfSpeech: "v.", meaning: "看見" },
+            { word: "quiet", pronunciation: "[ˈkwaɪət]", partOfSpeech: "adj.", meaning: "安靜的" },
+            { word: "turn off", pronunciation: "[tɜːrn ɒf]", partOfSpeech: "phr.", meaning: "關掉" },
+            { word: "talk", pronunciation: "[tɔːk]", partOfSpeech: "v.", meaning: "說話" },
+            { word: "fight", pronunciation: "[faɪt]", partOfSpeech: "v. n.", meaning: "吵架；打架" },
+            { word: "turn", pronunciation: "[tɜːrn]", partOfSpeech: "n.", meaning: "(依次輪到的是)" },
+            { word: "follow", pronunciation: "[ˈfɒloʊ]", partOfSpeech: "v.", meaning: "遵守；跟隨" },
+            { word: "traffic jam", pronunciation: "[ˈtræfɪk dʒæm]", partOfSpeech: "n.", meaning: "塞車" },
+            { word: "guy", pronunciation: "[ɡaɪ]", partOfSpeech: "n.", meaning: "人；傢伙" },
+            { word: "magic", pronunciation: "[ˈmædʒɪk]", partOfSpeech: "adj.; n.", meaning: "神奇的；魔法" },
+            { word: "with", pronunciation: "[wɪð]", partOfSpeech: "prep.", meaning: "用；和" },
+            { word: "can", pronunciation: "[kæn]", partOfSpeech: "aux.", meaning: "可以；會" },
+            { word: "many", pronunciation: "[ˈmeni]", partOfSpeech: "adj.; pron.", meaning: "許多（的）" },
+            { word: "place", pronunciation: "[pleɪs]", partOfSpeech: "n.", meaning: "地方" },
+            { word: "use", pronunciation: "[juːz]", partOfSpeech: "v.; n.", meaning: "使用" },
+            { word: "sure", pronunciation: "[ʃʊr]", partOfSpeech: "adv.; adj.", meaning: "當然；確定的" },
+            { word: "let's", pronunciation: "[lets]", partOfSpeech: "phr.", meaning: "讓我們一起…" },
+            { word: "careful", pronunciation: "[ˈkerfəl]", partOfSpeech: "adj.", meaning: "小心的" },
+            { word: "museum", pronunciation: "[mjuːˈziːəm]", partOfSpeech: "n.", meaning: "博物館" },
+            { word: "hurry", pronunciation: "[ˈhɜːri]", partOfSpeech: "v.", meaning: "快點！" },
+            { word: "please", pronunciation: "[pliːz]", partOfSpeech: "v.", meaning: "請；拜託" },
+            { word: "wait", pronunciation: "[weɪt]", partOfSpeech: "v.", meaning: "等待" },
+            { word: "man", pronunciation: "[mæn]", partOfSpeech: "n.", meaning: "男人（複數為 men）" },
+            { word: "now", pronunciation: "[naʊ]", partOfSpeech: "adv.", meaning: "現在" }
+        ];
+
+        // 發音練習數據 - 顯示單字而不是音標
+        const pronunciationQuestions = [
+            { id: 1, options: ["may", "meal"], correct: 0, audio: "may" },
+            { id: 2, options: ["three", "tree"], correct: 0, audio: "three" },
+            { id: 3, options: ["best", "bath"], correct: 0, audio: "best" },
+            { id: 4, options: ["wash", "watch"], correct: 1, audio: "watch" },
+            { id: 5, options: ["gin", "chin"], correct: 0, audio: "gin" },
+            { id: 6, options: ["breath", "breathe"], correct: 0, audio: "breath" },
+            { id: 7, options: ["full", "fool"], correct: 1, audio: "fool" },
+            { id: 8, options: ["short", "shout"], correct: 0, audio: "short" },
+            { id: 9, options: ["take", "tack"], correct: 0, audio: "take" },
+            { id: 10, options: ["play", "ply"], correct: 0, audio: "play" },
+            { id: 11, options: ["look", "like"], correct: 0, audio: "look" },
+            { id: 12, options: ["see", "sad"], correct: 0, audio: "see" }
+        ];
+
+        // 現在分詞練習數據 - 修正錯誤
+        const gerundQuestions = [
+            { id: 1, sentence: "Yuki is ______ (拍照) pictures of her favorite singer at the concert.", answer: "taking", baseForm: "take" },
+            { id: 2, sentence: "The girls are ______ (打) basketball, not baseball.", answer: "playing", baseForm: "play" },
+            { id: 3, sentence: "I am ______ (學習) English with my friends in my room.", answer: "studying", baseForm: "study" },
+            { id: 4, sentence: "He is ______ (聽) to music.", answer: "listening", baseForm: "listen" },
+            { id: 5, sentence: "They are ______ (散步) a walk in the park.", answer: "taking", baseForm: "take" },
+            { id: 6, sentence: "She is ______ (閱讀) a book in the library.", answer: "reading", baseForm: "read" },
+            { id: 7, sentence: "We are ______ (等待) for the bus at the station.", answer: "waiting", baseForm: "wait" },
+            { id: 8, sentence: "The dog is ______ (跑) in the garden.", answer: "running", baseForm: "run" },
+            { id: 9, sentence: "He is ______ (寫) a letter to his friend.", answer: "writing", baseForm: "write" },
+            { id: 10, sentence: "They are ______ (游泳) in the pool.", answer: "swimming", baseForm: "swim" },
+            { id: 11, sentence: "I am ______ (煮) dinner for my family.", answer: "cooking", baseForm: "cook" },
+            { id: 12, sentence: "She is ______ (畫) a picture for the art class.", answer: "drawing", baseForm: "draw" }
+        ];
+
+        // 人稱代名詞練習數據
+        const pronounQuestions = [
+            { id: 1, sentence: "A: Is the man a police officer? B: Yes, he is. Let's go talk to ______ (他).", answer: "him" },
+            { id: 2, sentence: "A: Let's wake up the girl. B: OK. Let's wake ______ (她) up.", answer: "her" },
+            { id: 3, sentence: "I like my teacher. She is nice to ______ (我).", answer: "me" },
+            { id: 4, sentence: "We are waiting for our friends. Please wait for ______ (我們).", answer: "us" },
+            { id: 5, sentence: "They are my classmates. I play with ______ (他們) after school.", answer: "them" },
+            { id: 6, sentence: "This is my book. That book is ______ (你的).", answer: "yours" },
+            { id: 7, sentence: "The cat is hungry. Please give ______ (它) some food.", answer: "it" },
+            { id: 8, sentence: "My sister and I are students. ______ (我們) go to school together.", answer: "We" },
+            { id: 9, sentence: "That is ______ (他的) car.", answer: "his" },
+            { id: 10, sentence: "This pen is ______ (我的).", answer: "mine" },
+            { id: 11, sentence: "______ (他們) are playing in the park.", answer: "They" },
+            { id: 12, sentence: "Can you help ______ (我) with this homework?", answer: "me" }
+        ];
+
+        // 克漏字練習數據
+        const clozePassages = [
+            {
+                text: "Hey, what are you ______ (觀看)? I am ______ (觀看) Mayday's new ______ (音樂影片). My ______ (最喜歡的) band is singing on ______ (舞台). Come ______ (看一看)! Are you ______ (有空) for the ______ (見面會) on ______ (星期日)?",
+                blanks: [
+                    { id: 1, answer: "watching" },
+                    { id: 2, answer: "watching" },
+                    { id: 3, answer: "music video" },
+                    { id: 4, answer: "favorite" },
+                    { id: 5, answer: "stage" },
+                    { id: 6, answer: "take a look" },
+                    { id: 7, answer: "free" },
+                    { id: 8, answer: "meet-and-greet" },
+                    { id: 9, answer: "Sunday" }
+                ]
+            },
+            {
+                text: "I'm so excited! My ______ (最喜歡的) singer is having a ______ (音樂會) this ______ (週末). The ______ (派對) is on ______ (星期六) night. ______ (每個人) is going to be there. Can you ______ (簽名) this picture for me? I'm a big ______ (粉絲) of yours!",
+                blanks: [
+                    { id: 1, answer: "favorite" },
+                    { id: 2, answer: "concert" },
+                    { id: 3, answer: "weekend" },
+                    { id: 4, answer: "party" },
+                    { id: 5, answer: "Saturday" },
+                    { id: 6, answer: "Everyone" },
+                    { id: 7, answer: "sign" },
+                    { id: 8, answer: "fan" }
+                ]
+            },
+            {
+                text: "It's a beautiful ______ (天) today. The ______ (天氣) is perfect for a picnic. ______ (讓我們) go to the park ______ (一起). Don't forget to bring ______ (所有) the food. I'll ______ (準備) the drinks. Are you ______ (準備好的) to go now?",
+                blanks: [
+                    { id: 1, answer: "day" },
+                    { id: 2, answer: "weather" },
+                    { id: 3, answer: "Let's" },
+                    { id: 4, answer: "together" },
+                    { id: 5, answer: "all" },
+                    { id: 6, answer: "prepare" },
+                    { id: 7, answer: "ready" }
+                ]
+            }
+        ];
+
+        // 全局變量
+        let currentCardIndex = 0;
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        let currentRoundWords = [];
+        let learnedInRound = [];
+        let practiceInRound = [];
+        let currentClozePassage = null;
+        let currentGerundQuestions = [];
+        let currentPronounQuestions = [];
+        let currentPronunciationQuestions = [];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化單字卡片
+            startNewRound();
+            
+            // 初始化發音練習
+            initPronunciation();
+            
+            // 初始化文法練習
+            initGrammar();
+            
+            // 初始化克漏字練習
+            initCloze();
+            
+            // 初始化標籤頁
+            initTabs();
+            
+            // 初始化積分顯示
+            updatePointsDisplay();
+            
+            // 更新統計信息
+            updateStats();
+        });
+
+        // 開始新回合
+        function startNewRound() {
+            // 重置回合數據
+            currentRoundWords = [...vocabulary].sort(() => Math.random() - 0.5);
+            learnedInRound = [];
+            practiceInRound = [];
+            currentCardIndex = 0;
+            
+            // 隱藏完成消息
+            document.getElementById('round-complete-message').classList.add('hidden');
+            
+            // 顯示第一張卡片
+            showCard(currentRoundWords, 0);
+            
+            // 更新回合信息
+            updateRoundInfo();
+            
+            // 添加卡片翻轉事件
+            document.getElementById('flashcard').addEventListener('click', function() {
+                this.classList.toggle('flipped');
+            });
+            
+            // 添加按鈕事件
+            document.getElementById('btn-learned').addEventListener('click', function() {
+                markWordAsLearned(currentRoundWords[currentCardIndex].word);
+                nextCard(currentRoundWords);
+            });
+            
+            document.getElementById('btn-practice').addEventListener('click', function() {
+                markWordAsPractice(currentRoundWords[currentCardIndex].word);
+                nextCard(currentRoundWords);
+            });
+            
+            // 添加新回合按鈕事件
+            document.getElementById('new-round-btn').addEventListener('click', startNewRound);
+            
+            // 添加發音按鈕事件
+            document.getElementById('audio-btn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                speakWord(currentRoundWords[currentCardIndex].word);
+            });
+        }
+
+        // 顯示卡片
+        function showCard(vocabList, index) {
+            const word = vocabList[index];
+            document.getElementById('card-meaning-front').textContent = word.meaning;
+            document.getElementById('card-word-back').textContent = word.word;
+            document.getElementById('card-pronunciation').textContent = word.pronunciation;
+            document.getElementById('card-part').textContent = word.partOfSpeech;
+            
+            // 重置卡片狀態
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        // 下一張卡片
+        function nextCard(vocabList) {
+            // 如果還有需要練習的單字，優先顯示
+            if (practiceInRound.length > 0) {
+                const nextPracticeWord = practiceInRound[0];
+                const practiceIndex = vocabList.findIndex(word => word.word === nextPracticeWord);
+                if (practiceIndex !== -1) {
+                    currentCardIndex = practiceIndex;
+                } else {
+                    // 如果找不到，從練習列表中移除
+                    practiceInRound.shift();
+                    currentCardIndex = findNextUnlearnedWord(vocabList);
+                }
+            } else {
+                currentCardIndex = findNextUnlearnedWord(vocabList);
+            }
+            
+            // 如果所有單字都已學會，顯示完成消息
+            if (currentCardIndex === -1) {
+                document.getElementById('round-complete-message').classList.remove('hidden');
+                addPoints(10);
+                return;
+            }
+            
+            showCard(vocabList, currentCardIndex);
+            updateRoundInfo();
+        }
+
+        // 查找下一個未學會的單字
+        function findNextUnlearnedWord(vocabList) {
+            // 從當前位置開始尋找下一個未學會的單字
+            for (let i = 1; i <= vocabList.length; i++) {
+                const index = (currentCardIndex + i) % vocabList.length;
+                if (!learnedInRound.includes(vocabList[index].word)) {
+                    return index;
+                }
+            }
+            
+            return -1; // 所有單字都已學會
+        }
+
+        // 更新回合信息
+        function updateRoundInfo() {
+            const totalWords = currentRoundWords.length;
+            const learnedCount = learnedInRound.length;
+            const remainingCount = totalWords - learnedCount;
+            
+            document.getElementById('round-progress').textContent = `${learnedCount}/${totalWords}`;
+            document.getElementById('remaining-words').textContent = remainingCount;
+        }
+
+        // 標記單字為已學會
+        function markWordAsLearned(word) {
+            if (!learnedInRound.includes(word)) {
+                learnedInRound.push(word);
+                
+                // 從需練習列表中移除
+                const practiceIndex = practiceInRound.indexOf(word);
+                if (practiceIndex !== -1) {
+                    practiceInRound.splice(practiceIndex, 1);
+                }
+                
+                // 更新全局學習狀態
+                let learnedWords = JSON.parse(localStorage.getItem('learnedWords')) || [];
+                if (!learnedWords.includes(word)) {
+                    learnedWords.push(word);
+                    localStorage.setItem('learnedWords', JSON.stringify(learnedWords));
+                }
+                
+                let practiceWords = JSON.parse(localStorage.getItem('practiceWords')) || [];
+                practiceWords = practiceWords.filter(w => w !== word);
+                localStorage.setItem('practiceWords', JSON.stringify(practiceWords));
+                
+                updateStats();
+                updateReviewItems();
+                addPoints(2);
+            }
+        }
+
+        // 標記單字為需練習
+        function markWordAsPractice(word) {
+            if (!practiceInRound.includes(word)) {
+                practiceInRound.push(word);
+                
+                // 更新全局學習狀態
+                let practiceWords = JSON.parse(localStorage.getItem('practiceWords')) || [];
+                if (!practiceWords.includes(word)) {
+                    practiceWords.push(word);
+                    localStorage.setItem('practiceWords', JSON.stringify(practiceWords));
+                }
+                
+                let learnedWords = JSON.parse(localStorage.getItem('learnedWords')) || [];
+                learnedWords = learnedWords.filter(w => w !== word);
+                localStorage.setItem('learnedWords', JSON.stringify(learnedWords));
+                
+                updateStats();
+                updateReviewItems();
+                addPoints(1);
+            }
+        }
+
+        // 使用Web Speech API播放單字發音
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('您的瀏覽器不支援語音合成功能，請使用Chrome或Edge瀏覽器。');
+            }
+        }
+
+        // 初始化發音練習
+        function initPronunciation() {
+            generatePronunciationQuestions();
+            
+            // 添加檢查答案事件
+            document.getElementById('check-pronunciation').addEventListener('click', checkPronunciationAnswers);
+            
+            // 添加更多練習事件
+            document.getElementById('new-pronunciation').addEventListener('click', generatePronunciationQuestions);
+        }
+
+        // 生成發音練習題目
+        function generatePronunciationQuestions() {
+            const pronunciationContainer = document.getElementById('pronunciation-questions');
+            pronunciationContainer.innerHTML = '';
+            
+            // 隨機選擇8個題目
+            currentPronunciationQuestions = [...pronunciationQuestions]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 8);
+            
+            currentPronunciationQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'exercise-card';
+                questionDiv.innerHTML = `
+                    <div class="exercise-title">發音練習 ${index + 1}</div>
+                    <button class="audio-btn" data-audio="${question.audio}">🔊 播放</button>
+                    <p>請選擇你聽到的發音：</p>
+                    <div class="options">
+                        <div class="option" data-question="${question.id}" data-option="0">${question.options[0]}</div>
+                        <div class="option" data-question="${question.id}" data-option="1">${question.options[1]}</div>
+                    </div>
+                    <div class="feedback" id="feedback-pronunciation-${question.id}"></div>
+                `;
+                pronunciationContainer.appendChild(questionDiv);
+            });
+            
+            // 添加音頻按鈕事件
+            document.querySelectorAll('#pronunciation-questions .audio-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const audioText = this.getAttribute('data-audio');
+                    speakWord(audioText);
+                });
+            });
+            
+            // 添加選項選擇事件
+            document.querySelectorAll('#pronunciation-questions .option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionId = this.getAttribute('data-question');
+                    const optionIndex = parseInt(this.getAttribute('data-option'));
+                    
+                    // 移除同一問題的其他選項的選擇狀態
+                    document.querySelectorAll(`#pronunciation-questions .option[data-question="${questionId}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // 添加當前選項的選擇狀態
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        // 檢查發音練習答案
+        function checkPronunciationAnswers() {
+            let correctCount = 0;
+            
+            currentPronunciationQuestions.forEach(question => {
+                const selectedOption = document.querySelector(`#pronunciation-questions .option[data-question="${question.id}"].selected`);
+                const feedback = document.getElementById(`feedback-pronunciation-${question.id}`);
+                
+                if (selectedOption) {
+                    const selectedIndex = parseInt(selectedOption.getAttribute('data-option'));
+                    
+                    if (selectedIndex === question.correct) {
+                        feedback.textContent = "✓ 正確！";
+                        feedback.className = "feedback correct";
+                        correctCount++;
+                    } else {
+                        feedback.textContent = `✗ 不正確。正確答案是：${question.options[question.correct]}`;
+                        feedback.className = "feedback incorrect";
+                    }
+                    feedback.style.display = 'block';
+                } else {
+                    const feedback = document.getElementById(`feedback-pronunciation-${question.id}`);
+                    feedback.textContent = "請選擇一個答案。";
+                    feedback.className = "feedback incorrect";
+                    feedback.style.display = 'block';
+                }
+            });
+            
+            // 顯示總體結果並獎勵積分
+            const earnedPoints = Math.floor(correctCount * 1.5);
+            addPoints(earnedPoints);
+            alert(`發音練習完成！\n正確: ${correctCount}/${currentPronunciationQuestions.length}\n獲得 ${earnedPoints} 積分`);
+        }
+
+        // 初始化文法練習
+        function initGrammar() {
+            generateGerundQuestions();
+            generatePronounQuestions();
+            
+            // 添加檢查答案事件
+            document.getElementById('check-gerund').addEventListener('click', checkGerundAnswers);
+            document.getElementById('check-pronoun').addEventListener('click', checkPronounAnswers);
+            
+            // 添加更多練習事件
+            document.getElementById('new-gerund').addEventListener('click', generateGerundQuestions);
+            document.getElementById('new-pronoun').addEventListener('click', generatePronounQuestions);
+        }
+
+        // 生成現在分詞練習題目
+        function generateGerundQuestions() {
+            const gerundContainer = document.getElementById('gerund-questions');
+            gerundContainer.innerHTML = '';
+            
+            // 隨機選擇6個題目
+            currentGerundQuestions = [...gerundQuestions]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 6);
+            
+            currentGerundQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                let hintHTML = '';
+                if (question.hint) {
+                    hintHTML = `<div class="hint">提示: ${question.hint}</div>`;
+                }
+                
+                questionDiv.innerHTML = `
+                    <div class="exercise-title">現在分詞練習 ${index + 1}</div>
+                    <p>${question.sentence}</p>
+                    ${hintHTML}
+                    <input type="text" id="gerund-answer-${question.id}" placeholder="請輸入現在分詞">
+                    <div class="feedback" id="feedback-gerund-${question.id}"></div>
+                `;
+                gerundContainer.appendChild(questionDiv);
+            });
+        }
+
+        // 檢查現在分詞練習答案
+        function checkGerundAnswers() {
+            let correctCount = 0;
+            
+            currentGerundQuestions.forEach(question => {
+                const answerInput = document.getElementById(`gerund-answer-${question.id}`);
+                const userAnswer = answerInput.value.trim().toLowerCase();
+                const feedback = document.getElementById(`feedback-gerund-${question.id}`);
+                
+                if (userAnswer === question.answer) {
+                    feedback.textContent = "✓ 正確！";
+                    feedback.className = "feedback correct";
+                    correctCount++;
+                } else {
+                    feedback.textContent = `✗ 不正確。正確答案是：${question.answer} (原形: ${question.baseForm})`;
+                    feedback.className = "feedback incorrect";
+                }
+                feedback.style.display = 'block';
+            });
+            
+            // 顯示總體結果並獎勵積分
+            const earnedPoints = Math.floor(correctCount * 1.5);
+            addPoints(earnedPoints);
+            alert(`現在分詞練習完成！\n正確: ${correctCount}/${currentGerundQuestions.length}\n獲得 ${earnedPoints} 積分`);
+        }
+
+        // 生成人稱代名詞練習題目
+        function generatePronounQuestions() {
+            const pronounContainer = document.getElementById('pronoun-questions');
+            pronounContainer.innerHTML = '';
+            
+            // 隨機選擇6個題目
+            currentPronounQuestions = [...pronounQuestions]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 6);
+            
+            currentPronounQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="exercise-title">人稱代名詞練習 ${index + 1}</div>
+                    <p>${question.sentence}</p>
+                    <input type="text" id="pronoun-answer-${question.id}" placeholder="請輸入人稱代名詞">
+                    <div class="feedback" id="feedback-pronoun-${question.id}"></div>
+                `;
+                pronounContainer.appendChild(questionDiv);
+            });
+        }
+
+        // 檢查人稱代名詞練習答案
+        function checkPronounAnswers() {
+            let correctCount = 0;
+            
+            currentPronounQuestions.forEach(question => {
+                const answerInput = document.getElementById(`pronoun-answer-${question.id}`);
+                const userAnswer = answerInput.value.trim().toLowerCase();
+                const feedback = document.getElementById(`feedback-pronoun-${question.id}`);
+                
+                if (userAnswer === question.answer) {
+                    feedback.textContent = "✓ 正確！";
+                    feedback.className = "feedback correct";
+                    correctCount++;
+                } else {
+                    feedback.textContent = `✗ 不正確。正確答案是：${question.answer}`;
+                    feedback.className = "feedback incorrect";
+                }
+                feedback.style.display = 'block';
+            });
+            
+            // 顯示總體結果並獎勵積分
+            const earnedPoints = Math.floor(correctCount * 1.5);
+            addPoints(earnedPoints);
+            alert(`人稱代名詞練習完成！\n正確: ${correctCount}/${currentPronounQuestions.length}\n獲得 ${earnedPoints} 積分`);
+        }
+
+        // 初始化克漏字練習
+        function initCloze() {
+            generateClozeExercise();
+            
+            // 添加檢查答案事件
+            document.getElementById('check-cloze').addEventListener('click', checkClozeAnswers);
+            
+            // 添加公布答案事件
+            document.getElementById('show-answers').addEventListener('click', showClozeAnswers);
+            
+            // 添加更多練習事件
+            document.getElementById('new-cloze').addEventListener('click', generateClozeExercise);
+        }
+
+        // 生成克漏字練習
+        function generateClozeExercise() {
+            const clozeContainer = document.getElementById('cloze-passage');
+            clozeContainer.innerHTML = '';
+            
+            // 隨機選擇一個克漏字段落
+            currentClozePassage = clozePassages[Math.floor(Math.random() * clozePassages.length)];
+            
+            let passageHTML = '<p>';
+            const words = currentClozePassage.text.split(' ');
+            let blankIndex = 0;
+            
+            words.forEach(word => {
+                if (word === '______') {
+                    const blank = currentClozePassage.blanks[blankIndex];
+                    const answerWords = blank.answer.split(' ');
+                    
+                    for (let i = 0; i < answerWords.length; i++) {
+                        passageHTML += `<input type="text" id="cloze-answer-${blank.id}-${i}" placeholder="填入答案" style="width: ${answerWords.length > 1 ? '80px' : '120px'}; margin: 0 2px;" class="cloze-blank"> `;
+                    }
+                    blankIndex++;
+                } else {
+                    passageHTML += word + ' ';
+                }
+            });
+            
+            passageHTML += '</p>';
+            clozeContainer.innerHTML = passageHTML;
+        }
+
+        // 檢查克漏字練習答案
+        function checkClozeAnswers() {
+            let correctCount = 0;
+            
+            currentClozePassage.blanks.forEach(blank => {
+                const answerWords = blank.answer.split(' ');
+                let blankCorrect = true;
+                
+                for (let i = 0; i < answerWords.length; i++) {
+                    const answerInput = document.getElementById(`cloze-answer-${blank.id}-${i}`);
+                    const userAnswer = answerInput.value.trim().toLowerCase();
+                    
+                    if (userAnswer === answerWords[i].toLowerCase()) {
+                        answerInput.style.backgroundColor = '#d4edda';
+                    } else {
+                        answerInput.style.backgroundColor = '#f8d7da';
+                        blankCorrect = false;
+                    }
+                }
+                
+                if (blankCorrect) {
+                    correctCount++;
+                }
+            });
+            
+            // 顯示總體結果並獎勵積分
+            const earnedPoints = Math.floor(correctCount * 2);
+            addPoints(earnedPoints);
+            alert(`克漏字練習完成！\n正確: ${correctCount}/${currentClozePassage.blanks.length}\n獲得 ${earnedPoints} 積分`);
+        }
+
+        // 公布克漏字答案
+        function showClozeAnswers() {
+            currentClozePassage.blanks.forEach(blank => {
+                const answerWords = blank.answer.split(' ');
+                
+                for (let i = 0; i < answerWords.length; i++) {
+                    const answerInput = document.getElementById(`cloze-answer-${blank.id}-${i}`);
+                    const userAnswer = answerInput.value.trim().toLowerCase();
+                    
+                    if (userAnswer !== answerWords[i].toLowerCase()) {
+                        answerInput.style.backgroundColor = '#f8d7da';
+                        // 在輸入框後面顯示正確答案
+                        const correctAnswerSpan = document.createElement('span');
+                        correctAnswerSpan.className = 'correct-answer';
+                        correctAnswerSpan.textContent = `正確答案: ${answerWords[i]}`;
+                        answerInput.parentNode.insertBefore(correctAnswerSpan, answerInput.nextSibling);
+                    } else {
+                        answerInput.style.backgroundColor = '#d4edda';
+                    }
+                }
+            });
+        }
+
+        // 初始化標籤頁
+        function initTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有標籤的活動狀態
+                    document.querySelectorAll('.tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // 隱藏所有標籤內容
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // 設置當前標籤為活動狀態
+                    this.classList.add('active');
+                    
+                    // 顯示對應的標籤內容
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // 更新統計信息
+        function updateStats() {
+            const learnedWords = JSON.parse(localStorage.getItem('learnedWords')) || [];
+            const practiceWords = JSON.parse(localStorage.getItem('practiceWords')) || [];
+            
+            document.getElementById('learned-count').textContent = learnedWords.length;
+            document.getElementById('practice-count').textContent = practiceWords.length;
+            
+            const totalWords = vocabulary.length;
+            const progress = Math.round((learnedWords.length / totalWords) * 100);
+            document.getElementById('progress-percent').textContent = `${progress}%`;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            
+            document.getElementById('points-count').textContent = points;
+        }
+
+        // 更新需複習項目
+        function updateReviewItems() {
+            const reviewContainer = document.getElementById('review-items');
+            reviewContainer.innerHTML = '';
+            
+            const practiceWords = JSON.parse(localStorage.getItem('practiceWords')) || [];
+            
+            if (practiceWords.length === 0) {
+                reviewContainer.innerHTML = '<p>目前沒有需要複習的項目。繼續保持！</p>';
+                return;
+            }
+            
+            const practiceList = document.createElement('ul');
+            practiceWords.forEach(word => {
+                const wordItem = document.createElement('li');
+                wordItem.textContent = word;
+                practiceList.appendChild(wordItem);
+            });
+            
+            reviewContainer.appendChild(practiceList);
+        }
+
+        // 添加積分
+        function addPoints(amount) {
+            points += amount;
+            localStorage.setItem('points', points.toString());
+            updatePointsDisplay();
+            
+            // 顯示積分獎勵消息
+            const rewardMessage = document.getElementById('reward-message');
+            rewardMessage.textContent = `+${amount} 積分!`;
+            rewardMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                rewardMessage.style.display = 'none';
+            }, 1500);
+        }
+
+        // 更新積分顯示
+        function updatePointsDisplay() {
+            document.getElementById('points-display').textContent = `積分: ${points}`;
+            document.getElementById('points-count').textContent = points;
+        }
+    </script>
+</body>
+</html>
